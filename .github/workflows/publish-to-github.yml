@@ -1,6 +1,11 @@
 name: Publish to GitHub Packages
 on:
   workflow_call:
+    secrets:
+      username:
+        required: true
+      password:
+        required: true
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -13,7 +18,11 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+      - name: Configure Maven settings.xml with PAT
+        uses: whelk-io/maven-settings-xml-action@v20
+        with:
+          servers: '[{ "id": "github-quidli", "username": "${{ secrets.username }}", "password": "${{ secrets.password }}" }]'
       - name: Publish package
         run: mvn --batch-mode deploy -DskipTests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
