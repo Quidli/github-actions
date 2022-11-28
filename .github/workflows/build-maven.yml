@@ -2,8 +2,6 @@ name: Build with Maven
 on:
   workflow_call:
     secrets:
-      username:
-        required: true
       password:
         required: true
 jobs:
