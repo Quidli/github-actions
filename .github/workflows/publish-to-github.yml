@@ -2,8 +2,6 @@ name: Publish to GitHub Packages
 on:
   workflow_call:
 jobs:
-  build:
-    uses: quidli/github-actions/.github/workflows/build-maven.yml@main
   publish:
     needs: build
     runs-on: ubuntu-latest
