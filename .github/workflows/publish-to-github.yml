@@ -13,10 +13,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Configure Maven settings.xml with PAT
-        uses: whelk-io/maven-settings-xml-action@v20
-        with:
-          servers: '[{ "id": "github-quidli", "username": "lmarqueze@gmail.com", "password": "${{ secrets.PAT }}" }]'
       - name: Publish package
         run: mvn --batch-mode deploy -DskipTests
         env:
