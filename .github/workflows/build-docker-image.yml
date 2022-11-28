@@ -1,6 +1,11 @@
 name: Build Docker image
 on:
   workflow_call:
+    secrets:
+      username:
+        required: true
+      password:
+        required: true
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
