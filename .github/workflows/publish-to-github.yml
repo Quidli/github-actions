@@ -1,28 +1,10 @@
 name: Publish to GitHub Packages
 on:
   workflow_call:
-    secrets:
-      username:
-        required: true
-      password:
-        required: true
 jobs:
-  publish:
+  create-docker-image:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-      - name: Configure Maven settings.xml with PAT
-        uses: whelk-io/maven-settings-xml-action@v20
-        with:
-          servers: '[{ "id": "github-quidli", "username": "${{ secrets.username }}", "password": "${{ secrets.password }}" }]'
-      - name: Publish package
-        run: mvn --batch-mode deploy -DskipTests
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Docker image
+        run: mvn spring-boot:build-image
