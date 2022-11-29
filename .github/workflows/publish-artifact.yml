@@ -23,4 +23,4 @@ jobs:
         with:
           servers: '[{ "id": "github-quidli", "username": "${{ secrets.username }}", "password": "${{ secrets.password }}" }]'
       - name: Publish package
-        run: mvn --batch-mode deploy -DskipTests
+        run: mvn --batch-mode deploy
