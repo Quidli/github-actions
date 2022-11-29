@@ -51,15 +51,15 @@ jobs:
           echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
           echo "IMAGE_NAME=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}" >> $GITHUB_ENV
 
-      #      - name: Download task definition
-      #        run: |
-      #          echo "TASK_DEFINITION_FILE=aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION }} --query taskDefinition > task-definition.json" >> $GITHUB_ENV
+      - name: Download task definition
+        run: |
+          echo "TASK_DEFINITION_FILE=$(aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION }} --query taskDefinition)" >> $GITHUB_ENV
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@f15ed65f9cc12455139db0f8e8ff6f6aaad6dfda
         with:
-          task-definition: $(aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION }} --query taskDefinition > task-definition.json)
+          task-definition: ${{ env.TASK_DEFINITION_FILE }}
           container-name: ${{ secrets.AWS_CONTAINER_NAME }}
           image: ${{ env.IMAGE_NAME }}
 
