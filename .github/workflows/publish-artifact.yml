@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+name: Publish artifact to GitHub Packages
 on:
   workflow_call:
     secrets:
