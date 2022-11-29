@@ -26,14 +26,6 @@ on:
       GITHUB_PACKAGES_PASSWORD:
         required: true
 
-#  env:
-#    AWS_REGION: us-east-1                         # set this to your preferred AWS region, e.g. us-west-1
-#  ECR_REPOSITORY: ${{ secrets.aws_ecr_repository }}           # set this to your Amazon ECR repository name
-#  ECS_SERVICE: ${{ secrets.aws_ecs_service }}                 # set this to your Amazon ECS service name
-#  ECS_CLUSTER: ${{ secrets.aws_ecs_cluster }}                 # set this to your Amazon ECS cluster name
-#  ECS_TASK_DEFINITION: ${{ secrets.aws_ecs_task_definition }} # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
-#  CONTAINER_NAME: ${{ secrets.aws_ecs_container_name }}       # set this to the name of the container in the containerDefinitions section of your task definition
-
 jobs:
   deploy:
     name: Deploy
