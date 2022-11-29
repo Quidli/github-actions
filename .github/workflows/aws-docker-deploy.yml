@@ -11,6 +11,8 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      AWS_ECR_REGISTRY:
+        required: true
       AWS_CONTAINER_NAME:
         required: true
       AWS_ECR_REPOSITORY:
@@ -25,14 +27,6 @@ on:
         required: true
       GITHUB_PACKAGES_PASSWORD:
         required: true
-
-#  env:
-#    AWS_REGION: us-east-1                         # set this to your preferred AWS region, e.g. us-west-1
-#  ECR_REPOSITORY: ${{ secrets.aws_ecr_repository }}           # set this to your Amazon ECR repository name
-#  ECS_SERVICE: ${{ secrets.aws_ecs_service }}                 # set this to your Amazon ECS service name
-#  ECS_CLUSTER: ${{ secrets.aws_ecs_cluster }}                 # set this to your Amazon ECS cluster name
-#  ECS_TASK_DEFINITION: ${{ secrets.aws_ecs_task_definition }} # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
-#  CONTAINER_NAME: ${{ secrets.aws_ecs_container_name }}       # set this to the name of the container in the containerDefinitions section of your task definition
 
 jobs:
   deploy:
@@ -63,7 +57,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: 068948820930.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
@@ -72,7 +66,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-#
+
 #      - name: Fill in the new image ID in the Amazon ECS task definition
 #        id: task-def
 #        uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
