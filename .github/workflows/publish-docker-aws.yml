@@ -11,8 +11,8 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-      AWS_REGION:
-        required: true
+      #      AWS_REGION:
+      #        required: true
       AWS_CONTAINER_NAME:
         required: true
       AWS_ECR_REPOSITORY:
@@ -28,8 +28,8 @@ on:
       GITHUB_PACKAGES_PASSWORD:
         required: true
 
-#env:
-#  #  AWS_REGION: ${{ secrets.username }}                         # set this to your preferred AWS region, e.g. us-west-1
+    #env:
+    AWS_REGION: us-east-1                         # set this to your preferred AWS region, e.g. us-west-1
 #  ECR_REPOSITORY: ${{ secrets.aws_ecr_repository }}           # set this to your Amazon ECR repository name
 #  ECS_SERVICE: ${{ secrets.aws_ecs_service }}                 # set this to your Amazon ECS service name
 #  ECS_CLUSTER: ${{ secrets.aws_ecs_cluster }}                 # set this to your Amazon ECS cluster name
