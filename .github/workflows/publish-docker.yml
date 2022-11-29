@@ -33,4 +33,4 @@ jobs:
       - name: Build the Docker image
         run: |
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=ghcr.io/${{ env.GROUP_ID }}/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
-          docker push ghcr.io/${{ env.GROUP_ID }}/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/quidli/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
