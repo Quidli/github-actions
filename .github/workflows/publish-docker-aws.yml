@@ -1,0 +1,102 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: Deploy to Amazon ECS
+
+on:
+  workflow_call:
+  input:
+    ENVIRONMENT:
+      required: true
+      type: string
+  secrets:
+    AWS_ACCESS_KEY_ID:
+      required: true
+    AWS_SECRET_ACCESS_KEY:
+      required: true
+    AWS_REGION:
+      required: true
+    AWS_CONTAINER_NAME:
+      required: true
+    AWS_ECR_REPOSITORY:
+      required: true
+    AWS_ECS_CLUSTER:
+      required: true
+    AWS_ECS_SERVICE:
+      required: true
+    AWS_ECS_TASK_DEFINITION:
+      required: true
+    GITHUB_PACKAGES_USERNAME:
+      required: true
+    GITHUB_PACKAGES_PASSWORD:
+      required: true
+
+#env:
+#  #  AWS_REGION: ${{ secrets.username }}                         # set this to your preferred AWS region, e.g. us-west-1
+#  ECR_REPOSITORY: ${{ secrets.aws_ecr_repository }}           # set this to your Amazon ECR repository name
+#  ECS_SERVICE: ${{ secrets.aws_ecs_service }}                 # set this to your Amazon ECS service name
+#  ECS_CLUSTER: ${{ secrets.aws_ecs_cluster }}                 # set this to your Amazon ECS cluster name
+#  ECS_TASK_DEFINITION: ${{ secrets.aws_ecs_task_definition }} # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
+#  CONTAINER_NAME: ${{ secrets.aws_ecs_container_name }}       # set this to the name of the container in the containerDefinitions section of your task definition
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # so the dependencies may be downloaded from GitHub artifact repository
+      - name: Configure Maven settings.xml with PAT
+        uses: whelk-io/maven-settings-xml-action@v20
+        with:
+          servers: '[{ "id": "github-quidli", "username": "${{ secrets.GITHUB_PACKAGES_USERNAME }}", "password": "${{ secrets.GITHUB_PACKAGES_PASSWORD }}" }]'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be
+
+#      - name: Build, tag, and push image to Amazon ECR
+#        id: build-image
+#        env:
+#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#          IMAGE_TAG: ${{ github.sha }}
+#        run: |
+#          # Build a docker container and
+#          # push it to ECR so that it can
+#          # be deployed to ECS.
+#          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+#
+#      - name: Fill in the new image ID in the Amazon ECS task definition
+#        id: task-def
+#        uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
+#        with:
+#          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+#          container-name: ${{ env.CONTAINER_NAME }}
+#          image: ${{ steps.build-image.outputs.image }}
+#
+#      - name: Deploy Amazon ECS task definition
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@de0132cf8cdedb79975c6d42b77eb7ea193cf28e
+#        with:
+#          task-definition: ${{ steps.task-def.outputs.task-definition }}
+#          service: ${{ env.ECS_SERVICE }}
+#          cluster: ${{ env.ECS_CLUSTER }}
+#          wait-for-service-stability: true
