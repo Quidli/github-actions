@@ -58,13 +58,13 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-               # Build a docker container and
-               # push it to ECR so that it can
-               # be deployed to ECS.
-               mvn spring-boot:build-image -t -DskipTests -Dspring-boot.build-image.imageName=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
-          #          docker build -t $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG .
-               docker push $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
-               echo "image=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
+          #docker build -t $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
 #
 #      - name: Fill in the new image ID in the Amazon ECS task definition
 #        id: task-def
