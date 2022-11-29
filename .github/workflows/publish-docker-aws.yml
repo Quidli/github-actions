@@ -72,7 +72,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@f15ed65f9cc12455139db0f8e8ff6f6aaad6dfda
         with:
-          task-definition: ${{ secrets.AWS_ECS_TASK_DEFINITION }}
+          task-definition: arn:aws:ecs:us-east-1:068948820930:task-definition/quidli-dev
           container-name: ${{ secrets.AWS_CONTAINER_NAME }}
           image: ${{ env.IMAGE_NAME }}
 
