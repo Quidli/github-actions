@@ -32,5 +32,5 @@ jobs:
           echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
       - name: Build the Docker image
         run: |
-          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ env.GROUP_ID }}/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
-          docker push ${{ env.GROUP_ID }}/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=ghcr.io/quidli/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/quidli/${{ env.ARTIFACT_ID }}:${{ env.RELEASE_VERSION }}
