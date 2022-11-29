@@ -11,27 +11,27 @@ name: Deploy to Amazon ECS
 
 on:
   workflow_call:
-  secrets:
-    AWS_ACCESS_KEY_ID:
-      required: true
-    AWS_SECRET_ACCESS_KEY:
-      required: true
-    AWS_REGION:
-      required: true
-    AWS_CONTAINER_NAME:
-      required: true
-    AWS_ECR_REPOSITORY:
-      required: true
-    AWS_ECS_CLUSTER:
-      required: true
-    AWS_ECS_SERVICE:
-      required: true
-    AWS_ECS_TASK_DEFINITION:
-      required: true
-    GITHUB_PACKAGES_USERNAME:
-      required: true
-    GITHUB_PACKAGES_PASSWORD:
-      required: true
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      AWS_CONTAINER_NAME:
+        required: true
+      AWS_ECR_REPOSITORY:
+        required: true
+      AWS_ECS_CLUSTER:
+        required: true
+      AWS_ECS_SERVICE:
+        required: true
+      AWS_ECS_TASK_DEFINITION:
+        required: true
+      GITHUB_PACKAGES_USERNAME:
+        required: true
+      GITHUB_PACKAGES_PASSWORD:
+        required: true
 
 #env:
 #  #  AWS_REGION: ${{ secrets.username }}                         # set this to your preferred AWS region, e.g. us-west-1
