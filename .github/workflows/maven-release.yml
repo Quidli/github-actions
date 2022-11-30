@@ -1,0 +1,49 @@
+name: Publish artifact to GitHub Packages
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The branch to release."
+        required: true
+        default: "main"
+      releaseVersion:
+        description: "Version to use when preparing a release."
+        required: true
+        default: "X.Y.Z"
+      developmentVersion:
+        description: "Version to use for new local working copy."
+        required: true
+        default: "X.Y.Z-SNAPSHOT"
+jobs:
+  release:
+    name: "Release a new version"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch '${{ inputs.branch }}'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Configure Git User
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+      - name: Maven Release
+        run: mvn release:prepare release:perform -B -s .maven_settings.xml -DreleaseVersion=${{ inputs.releaseVersion }} -DdevelopmentVersion=${{ inputs.developmentVersion }}
+        env:
+          CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+          CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
