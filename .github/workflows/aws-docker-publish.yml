@@ -48,12 +48,22 @@ jobs:
 
       - name: Configure image name and version
         run: |
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "IMAGE_NAME=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}" >> $GITHUB_ENV
+
+      - name: Check if Docker image with tag exists in ECR
+        id: check-image-exists
+        uses: mnmandahalf/check-ecr-image-exists@v0.1.1
+        with:
+          region: ${{ secrets.AWS_REGION }}
+          repository-name: ${{ secrets.AWS_ECR_REPOSITORY }}
+          image-tag: ${{ env.RELEASE_VERSION }}
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        if: ${{ env.execute == 0 }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
@@ -61,3 +71,5 @@ jobs:
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}
           docker push $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}
           echo "IMAGE_NAME=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}" >> $GITHUB_ENV
+        env:
+          execute: ${{ steps.check-image-exists.outputs.image-exists }}
