@@ -49,6 +49,7 @@ jobs:
       - name: Configure image name and version
         run: |
           echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
