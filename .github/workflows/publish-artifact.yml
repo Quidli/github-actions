@@ -8,8 +8,8 @@ on:
         required: true
 
 jobs:
-  name: Publish artifact to GitHub packages
   publish-artifact:
+    name: Publish artifact to GitHub packages
     runs-on: ubuntu-latest
     permissions:
       contents: read
