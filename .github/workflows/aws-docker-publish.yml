@@ -33,7 +33,7 @@ jobs:
       - name: Configure Maven settings.xml with PAT
         uses: whelk-io/maven-settings-xml-action@v20
         with:
-          servers: '[{ "id": "github-quidli", "username": "${{ secrets.GITHUB_PACKAGES_USERNAME }}", "password": "${{ secrets.GITHUB_PACKAGES_PASSWORD }}" }]'
+          servers: '[{ "id": "github", "username": "${{ secrets.GITHUB_PACKAGES_USERNAME }}", "password": "${{ secrets.GITHUB_PACKAGES_PASSWORD }}" }]'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838
