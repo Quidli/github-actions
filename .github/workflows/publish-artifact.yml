@@ -26,4 +26,4 @@ jobs:
         with:
           servers: '[{ "id": "github", "username": "${{ secrets.username }}", "password": "${{ secrets.password }}" }]'
       - name: Publish package
-        run: mvn --batch-mode deploy
+        run: mvn --batch-mode deploy -DskipTests
