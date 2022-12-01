@@ -61,19 +61,4 @@ jobs:
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}
           docker push $ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}
           echo "IMAGE_NAME=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }}" >> $GITHUB_ENV
-
-#      - name: Fill in the new image ID in the Amazon ECS task definition
-#        id: task-def
-#        uses: aws-actions/amazon-ecs-render-task-definition@f15ed65f9cc12455139db0f8e8ff6f6aaad6dfda
-#        with:
-#          task-definition: arn:aws:ecs:us-east-1:068948820930:task-definition/quidli-dev
-#          container-name: ${{ secrets.AWS_CONTAINER_NAME }}
-#          image: ${{ env.IMAGE_NAME }}
-#
-#      - name: Deploy Amazon ECS task definition
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@3cc43061dd30ad47511af35bca46e2c1435b9035
-#        with:
-#          task-definition: ${{ steps.task-def.outputs.task-definition }}
-#          service: ${{ secrets.AWS_ECS_SERVICE }}
-#          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
-#          wait-for-service-stability: true
+          echo "Image name: ${{env.IMAGE_NAME}}"
