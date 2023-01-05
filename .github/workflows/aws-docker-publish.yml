@@ -57,10 +57,8 @@ jobs:
 
       - name: Check if Docker image with tag exists in ECR
         run: |
-          #          IMAGE_NAME=aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --region ${{ secrets.AWS_REGION }} --query imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag --output text >> $GITHUB_ENV
-          #          echo "IMAGE_NAME: $IMAGE_NAME"
-               aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag" --output text >> $IMAGE_EXISTS
-               echo "Image exists: $IMAGE_EXISTS"
+          aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag" --output text >> $IMAGE_EXISTS
+          echo "Image exists: $IMAGE_EXISTS"
 
 #      - name: Check if Docker image with tag exists in ECR
 #        id: check-image-exists
