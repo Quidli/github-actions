@@ -64,7 +64,7 @@ jobs:
 
       - name: Check if Docker image with tag exists in ECR
         id: check-image-exists
-        uses: mnmandahalf/check-ecr-image-exists@v0.1.1
+        uses: mnmandahalf/check-ecr-image-exists@e072d624e6b48e0798b87080a96e49869951e7a2
         with:
           region: ${{ secrets.AWS_REGION }}
           repository-name: ${{ secrets.AWS_ECR_REPOSITORY }}
