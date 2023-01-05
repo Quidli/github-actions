@@ -51,15 +51,14 @@ jobs:
           ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }} >> $GITHUB_ENV
           RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
           IMAGE_NAME=$ECR_REGISTRY/${{ secrets.AWS_ECR_REPOSITORY }}:${{ env.RELEASE_VERSION }} >> $GITHUB_ENV
-          
           echo "ECR_REGISTRY: $ECR_REGISTRY"
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo "IMAGE_NAME: $IMAGE_NAME"
 
-      #      - name: Check if Docker image with tag exists in ECR
-      #        run: |
-      #          echo "IMAGE_NAME = aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --region ${{ secrets.AWS_REGION }} --query \"imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag\" --output text" >> $GITHUB_ENV
-
+      - name: Check if Docker image with tag exists in ECR
+        run: |
+          IMAGE_NAME = aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --region ${{ secrets.AWS_REGION }} --query imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag --output text >> $GITHUB_ENV
+          echo "IMAGE_NAME: $IMAGE_NAME"
       #          aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag" --output text >> $IMAGE_EXISTS
       #          echo "Image exists: $IMAGE_EXISTS"
 
