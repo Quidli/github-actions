@@ -55,22 +55,22 @@ jobs:
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo "IMAGE_NAME: $IMAGE_NAME"
 
-      - name: Check if Docker image with tag exists in ECR
-        run: |
-          IMAGE_NAME = aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --region ${{ secrets.AWS_REGION }} --query imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag --output text >> $GITHUB_ENV
-          echo "IMAGE_NAME: $IMAGE_NAME"
+      #      - name: Check if Docker image with tag exists in ECR
+      #        run: |
+      #          IMAGE_NAME=aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --region ${{ secrets.AWS_REGION }} --query imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag --output text >> $GITHUB_ENV
+      #          echo "IMAGE_NAME: $IMAGE_NAME"
       #          aws ecr list-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ env.RELEASE_VERSION }}'].imageTag" --output text >> $IMAGE_EXISTS
       #          echo "Image exists: $IMAGE_EXISTS"
 
-      #      - name: Check if Docker image with tag exists in ECR
-      #        id: check-image-exists
-      #        uses: mnmandahalf/check-ecr-image-exists@v0.1.1
-      #        with:
-      #          region: ${{ secrets.AWS_REGION }}
-      #          repository-name: ${{ secrets.AWS_ECR_REPOSITORY }}
-      #          image-tag: ${{ env.RELEASE_VERSION }}
-      #          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Check if Docker image with tag exists in ECR
+        id: check-image-exists
+        uses: mnmandahalf/check-ecr-image-exists@v0.1.1
+        with:
+          region: ${{ secrets.AWS_REGION }}
+          repository-name: ${{ secrets.AWS_ECR_REPOSITORY }}
+          image-tag: ${{ env.RELEASE_VERSION }}
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 #      - name: Build, tag, and push image to Amazon ECR
 #        if: ${{ env.execute == 0 }}
